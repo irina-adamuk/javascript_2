@@ -2,15 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Интернет-магазин</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>THE LOOP</title>
 </head>
 <body>
-<header>
-    <button class="btn-cart" type="button">Корзина</button>
-</header>
-<main>
-    <div class="products"></div>
-</main>
+    <div class="wrapper">
+        <header class="header">
+            <nav>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link"href="#">for men</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"href="#">for women</a>
+                    </li>
+                </ul>
+            </nav>
+            <img class="logo" src="img/logo.svg" alt="logo">
+            <button class="cart" type="button">
+                <span class="cart-count">8</span>
+            </button>
+        </header>
+        <main>
+            <div class="products"></div>
+        </main>            
+    </div>
+    
+
 <script src="./js/main.js"></script>
 </body>
 </html>
+
+
