@@ -19,12 +19,9 @@ const renderProduct = (img = "https://place-hold.it/205/211", title = 'Good', pr
             </div>`;
 }
 
-const renderProducts = (list = []) => {
-    const productListHTML = list.map((item) => renderProduct(item.img, item.title, item.price)).join('');
-
-    // ? товары были через запятую т.к. map формирует новый массив , чтобы запятой не было используем .join('')
+const renderProducts = (list) => {
     // console.log(productListHTML);
-    document.querySelector('.products').innerHTML = productListHTML;
+    document.querySelector('.products').insertAdjacentHTML("beforeend", list.map((item) => renderProduct(item.img, item.title, item.price)).join(''));
 }
 
 renderProducts(products);
