@@ -2,29 +2,29 @@
 class ProductList {
     constructor(container = '.products') {
         this.container = container;
-        this.goods = [];
-        this.allProducts = [];
-        this.fetchGoods();
-        this.render();
+        this._goods = [];
+        this._allProducts = [];
+        this._fetchGoods();
+        this._render();
 
     }
 
-    fetchGoods() {
-        this.goods = [
+    _fetchGoods() {
+        this._goods = [
                 {id: 1, title: 'Dress', price: 2000},
                 {id: 2, title: 'T-shirt', price: 1500},
                 {id: 3, title: 'Dress', price: 5000},
                 {id: 4, title: 'T-shirt', price: 2500},
             ];
     }
-    render() {
+    _render() {
         const block = document.querySelector(this.container);
 
-        for(const good of this.goods) {
+        for(const good of this._goods) {
             const productObject = new ProductItem(good);
             console.log(productObject);
             // this.allProducts.push(new ProductItem(good));
-            this.allProducts.push(productObject);
+            this._allProducts.push(productObject);
             block.insertAdjacentHTML('afterbegin', productObject.render());
         }
     }
