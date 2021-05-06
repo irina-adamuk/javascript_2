@@ -1,3 +1,129 @@
+let eventBus = new Vue()
+
+Vue.component('product', {
+   props: {
+      premium: {
+         type: Boolean,
+         required: true
+      }
+   },
+   template: `
+      <div class="product">
+
+         <div class="product-image">
+            <img :src="image" alt="image">
+         </div>
+
+         <div class="product-info">
+            <h1>{{ title }}</h1>
+            <p>{{ description }}</p>
+
+            <a href="link" target="_blank">More products like this</a>
+            <p v-if="inStock">In Stock</p>
+            <p v-else :class="{ outOfStock: !inStock }">Out of Stock</p>
+            <p>{{ sale }}</p>
+            
+            <info-tabs :shipping="shipping" :details="details"></info-tabs>
+            
+            <ul>
+               <li v-for="size in sizes">{{ size }}</li>
+            </ul>
+
+            <div v-for=" (variant, index) in variants" 
+               :key="variant.variantId"
+               class="color-box"
+               :style="{ backgroundColor: variant.variantColor}"
+               @mouseover="updateProduct(index)">
+            </div>
+      
+
+            <button @click="addToCart"
+               :disabled="!inStock"
+               :class="{ disabledButton: !inStock}">Add to Cart
+            </button>
+
+            <button @click="removeFromCart"
+               :disabled="!inStock"
+               :class="{ disabledButton: !inStock}"
+               >Remove from cart
+            </button>
+
+         </div><!-- /.product-info -->
+
+         <product-tabs :reviews="reviews"></product-tabs>
+
+      </div>
+   `,
+   data() {
+      return {
+         product: 'Socks',
+         brand: 'Veu Mastery',
+         description: 'A pair of warm fuzzy socks',
+         selectedVariant: 0,
+         link: 'https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=socks',
+         onSale: true,
+         details: ["80% cotton", "20% polyester", "Gender-neutral"],
+         variants: [
+            {
+               variantId: 2234,
+               variantColor: "green",
+               variantImage: 'https://www.vuemastery.com/images/challenges/vmSocks-green-onWhite.jpg',
+               variantQuantity: 10
+            },
+            {
+               variantId: 2235,
+               variantColor: "blue",
+               variantImage: 'https://www.vuemastery.com/images/challenges/vmSocks-blue-onWhite.jpg',
+               variantQuantity: 0   
+            }
+         ],
+         sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+         onSale: true,
+         reviews: []
+      }
+   },
+   methods: {
+      addToCart() {
+         this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId)
+      },
+      removeFromCart() {
+         this.$emit('remove-from-cart', this.variants[this.selectedVariant].variantId)
+      },
+      updateProduct(index) {
+         this.selectedVariant = index
+         console.log(index)
+      }
+   },
+   computed: {
+      title() {
+         return this.brand + ' ' + this.product
+      },
+      image() {
+         return this.variants[this.selectedVariant].variantImage
+      },
+      inStock() {
+         return this.variants[this.selectedVariant].variantQuantity
+      },
+      sale() {
+         if (this.onSale) {
+            return this.brand + ' ' + this.product + ' are on sale'
+         }
+            return this.brand + ' ' + this.product + ' are not on sale'
+      },
+      shipping() {
+         if (this.premium) {
+            return "Free"
+         }
+            return 2.99
+      }
+   },
+   mounted() {
+      eventBus.$on('review-submitted', function (productReview) {
+         this.reviews.push(productReview)
+      })
+   }
+})
+
 Vue.component('product-review', {
    template: `
       <form class="review-form" @submit.prevent="onSubmit">
@@ -39,7 +165,7 @@ Vue.component('product-review', {
          </label>
 
          <p>
-            <input type="submit" value="Submit">  
+            <input class="btn" type="submit" value="Submit">  
          </p>    
 
       </form>
@@ -56,6 +182,7 @@ Vue.component('product-review', {
    },
    methods: {
       onSubmit() {
+         this.errors = []
          if (this.name && this.review && this.rating && this.recommended) {
             let productReview = {
                name: this.name,
@@ -86,153 +213,88 @@ Vue.component('product-review', {
    }
 })
 
-
-
-
-Vue.component('product-details', {
+Vue.component('product-tabs', {
    props: {
+      reviews: {
+         type: Array,
+         required: true
+      }
+   },
+   template: `
+   <div>
+      <ul>
+         <span class="tabs"
+            :class="{ activeTab: selectedTab === tab }"
+            v-for="(tab, index) in tabs"
+            :key="tab"
+            @click="selectedTab = tab">
+            {{ tab }}</span>
+      </ul>
+
+      <div v-show="selectedTab === 'Reviews'">
+         <h2>Reviews</h2>
+         <p v-if="!reviews.length">There are no reviews yet.</p>
+         <ul v-esle>
+            <li v-for="(review, index) in reviews" :key="index">
+               <p>{{ review.name }}</p>
+               <p>Rating: {{ review.rating }}</p>
+               <p>{{ review.review }}</p>
+            </li>
+         </ul>
+      </div>
+      
+      <div v-show="selectedTab === 'Make a Review'">
+         <product-review></product-review>
+      </div>
+
+   </div>
+
+   `,
+   data () {
+      return {
+         tabs: ['Reviews', 'Make a Review'],
+         selectedTab: 'Reviews'
+      }
+   }
+})
+
+Vue.component('info-tabs', {
+   props: {
+      shipping: {
+         required: true
+      },
       details: {
          type: Array,
          required: true
       }
    },
    template: `
-      <ul>
-         <li v-for="detail in details">{{ detail }}</li>
-      </ul>
-   `
-})
+      <div>
+         <ul>
+            <span class="tabs"
+               :class="{ activeTab: selectedTab === tab }"
+               v-for="(tab, index) in tabs"
+               @click="selectedTab = tab"
+               :key="tab"
+            >{{ tab }}</span>
+         </ul>
 
-
-Vue.component('product', {
-   props: {
-      premium: {
-         type: Boolean,
-         required: true
-      }
-   },
-   template: `
-      <div class="product">
-
-         <div class="product-image">
-            <img :src="image" alt="image">
+         <div v-show="selectedTab === 'Shipping'">
+            <p>{{ shipping }}</p>
          </div>
 
-         <div class="product-info">
-            <h1>{{ title }}</h1>
-            <p>{{ description }}</p>
-
-            <a href="link" target="_blank">More products like this</a>
-            <p v-if="inStock">In Stock</p>
-            <p>Shipping: {{ shipping }}</p>
-            <p v-else :class="{ outOfStock: !inStock }">Out of Stock</p>
-            <p>{{ sale }}</p>
-
-            <product-details :details="details"></product-details>
-
+         <div v-show="selectedTab === 'Details'">
             <ul>
-               <li v-for="size in sizes">{{ size }}</li>
-            </ul>
-
-            <div v-for=" (variant, index) in variants" 
-               :key="variant.variantId"
-               class="color-box"
-               :style="{ backgroundColor: variant.variantColor}"
-               @mouseover="updateProduct(index)">
-            </div>
-      
-
-            <button @click="addToCart"
-               :disabled="!inStock"
-               :class="{ disabledButton: !inStock}">Add to Cart
-            </button>
-
-            <button @click="removeFromCart"
-               :disabled="!inStock"
-               :class="{ disabledButton: !inStock}"
-               >Remove from cart
-            </button>
-
-         </div><!-- /.product-info -->
-
-         <div>
-            <h2>Reviews</h2>
-            <p v-if="!reviews.length">There are no reviews yet.</p>
-            <ul>
-               <li v-for="review in reviews">
-               <p>{{ review.name }}</p>
-               <p>Rating: {{ review.rating }}</p>
-               <p>{{ review.review }}</p>
-               </li>
+               <li v-for="detail in details">{{ detail }}</li>
             </ul>
          </div>
-         <product-review @review-submitted="addReview"></product-review>
+
       </div>
    `,
-   data() {
+   data () {
       return {
-         product: 'Socks',
-         brand: 'Veu Mastery',
-         description: 'A pair of warm fuzzy socks',
-         selectedVariant: 0,
-         link: 'https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=socks',
-         onSale: true,
-         details: ["80% cotton", "20% polyester", "Gender-neutral"],
-         variants: [
-            {
-               variantId: 2234,
-               variantColor: "green",
-               variantImage: 'https://www.vuemastery.com/images/challenges/vmSocks-green-onWhite.jpg',
-               variantQuantity: 10
-            },
-            {
-               variantId: 2235,
-               variantColor: "blue",
-               variantImage: 'https://www.vuemastery.com/images/challenges/vmSocks-blue-onWhite.jpg',
-               variantQuantity: 0   
-            }
-         ],
-         sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-         onSale: true,
-         reviews: []
-      }
-   },
-   methods: {
-      addToCart() {
-         this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId)
-      },
-      removeFromCart() {
-         this.$emit('remove-from-cart', this.variants[this.selectedVariant].variantId)
-      },
-      updateProduct(index) {
-         this.selectedVariant = index
-         console.log(index)
-      },
-      addReview(productReview) {
-         this.reviews.push(productReview)
-      }
-   },
-   computed: {
-      title() {
-         return this.brand + ' ' + this.product
-      },
-      image() {
-         return this.variants[this.selectedVariant].variantImage
-      },
-      inStock() {
-         return this.variants[this.selectedVariant].variantQuantity
-      },
-      sale() {
-         if (this.onSale) {
-            return this.brand + ' ' + this.product + ' are on sale'
-         }
-            return this.brand + ' ' + this.product + ' are not on sale'
-      },
-      shipping() {
-         if (this.premium) {
-            return "Free"
-         }
-            return 2.99
+         tabs: ['Shipping', 'Details'],
+         selectedTab: 'Shipping'
       }
    }
 })
