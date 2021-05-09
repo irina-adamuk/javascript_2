@@ -5,7 +5,7 @@ const app = new Vue({
   data: {
     catalogUrl: '/catalogData.json',
     products: [],
-    imgCatalog: 'https://placehold.it/200x150'
+    imgCatalog: 'https://place-hold.it/200x150'
   },
   methods: {
     getJson(url){
@@ -17,21 +17,9 @@ const app = new Vue({
     },
     addProduct(product){
       console.log(product.id_product);
+      this.getJson(`${API}/addToBasket.json`).then(data)
     }
   },
-  beforeCreate() {},
-  created() {
-    this.getJson(`${API + this.catalogUrl}`)
-      .then(data => {
-        for(let el of data){
-          this.products.push(el);
-        }
-      });
-  },
-  beforeMount() {},
-  mounted(){},
-  beforeUpdate() {},
-  updated() {},
-  beforeDestroy() {},
-  destroyed() {},
+
+
 });
