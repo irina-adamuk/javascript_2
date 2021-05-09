@@ -2,39 +2,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Интернет-магазин</title>
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/style.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>THE LOOP</title>
 </head>
 <body>
-<div id="app">
-    <header>
-        <div class="logo">Интернет-магазин</div>
-        <div class="cart">
-            <form action="#" class="search-form">
-                <input type="text" class="search-field">
-                <button class="btn-search" type="submit">
-                    <i class="fas fa-search"></i>
-                </button>
-            </form>
-            <button class="btn-cart" type="button">Корзина</button>
-        </div>
-    </header>
-    <main>
-        <div class="products">
-            <div class="product-item" v-for="product of products" :key="product.id_product">
-                <img :src="imgCatalog" alt="Some img">
-                <div class="desc">
-                    <h3>{{product.product_name}}</h3>
-                    <p>{{product.price}}₽</p>
-                    <button class="buy-btn" @click="addProduct(product)">Купить</button>
+    <div id="app">
+        <div class="wrapper">
+            <header class="header">
+                <nav>
+                    <ul class="nav">
+                        <li class="nav__item">
+                            <a class="nav__link"href="#">for men</a>
+                        </li>
+                        <li class="nav__item">
+                            <a class="nav__link"href="#">for women</a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="logo">
+                    <img  src="img/logo.svg" alt="logo">
                 </div>
-            </div>
+                <div class="cart">
+                    <form action="#" class="search__form">
+                        <input type="text" class="search__field">
+                        <button class="search__btn" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                    <button class="cart__btn" type="button">
+                        <span class="cart__count">8</span>
+                    </button>
+                </div>
+            </header>
+            <main>
+                <div class="products">
+                    <div class="product__item" v-for="product of products" :key="product.id_product">
+                        <img :src="imgCatalog" alt=" Some img">
+                        <div class="product__inner">
+                            <h3>{{ product.product_name}}</h3>
+                            <p>{{ product.price }}₽</p>
+                            <button class="btn-buy" @click="addProduct(product)">Купить</button>                            
+                        </div>
+                    </div>    
+                </div>
+            </main>            
         </div>
-    </main>
-</div>
-<script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js" integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="js/main.js"></script>
+    </div><!-- /app -->
+
+    
+    <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js" integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="./js/script.js"></script>
 </body>
 </html>
+
+
