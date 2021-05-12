@@ -1,5 +1,4 @@
 'use strict';
-
 Vue.component('product-filter', {
    template: `<form action="#" class="search__form" @submit.prevent="$parent.filter(userSearch)">
                   <input type="text" class="search__field" v-model="userSearch">
