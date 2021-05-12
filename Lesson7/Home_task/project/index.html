@@ -28,19 +28,10 @@
                     <product-filter></product-filter>
                     <cart ref="cart"></cart>
                 </div>
-                
             </header>
             <main>
-                <div class="products">
-                    <div class="product__item" v-for="product of filtered" :key="product.id_product">
-                        <img :src="imgCatalog" alt=" Some img">
-                        <div class="product__inner">
-                            <h3 class="product__title">{{ product.product_name}}</h3>
-                            <p class="product__price">{{ product.price }}₽</p>
-                            <button class="btn--buy" @click="addProduct(product)">Купить</button>                            
-                        </div>
-                    </div>    
-                </div>
+                <products ref="products"></products>
+                <error ref="error"></error>
             </main>            
         </div><!-- /.wrapper -->
     </div><!-- /app -->
@@ -48,7 +39,11 @@
     
     <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js" integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="./js/script.js"></script>
+    <script src="js/CartComponent.js"></script>
+    <script src="js/ProductComponent.js"></script>
+    <script src="js/FilerComponent.js"></script>
+    <script src="js/ErrorComponent.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
 
