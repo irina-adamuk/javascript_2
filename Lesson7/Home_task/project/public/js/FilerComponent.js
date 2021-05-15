@@ -10,4 +10,4 @@ Vue.component('product-filter', {
          userSearch: ''
       }
    }
-})
+});
