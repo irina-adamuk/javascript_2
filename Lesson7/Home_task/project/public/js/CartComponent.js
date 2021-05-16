@@ -49,20 +49,18 @@ Vue.component('cart', {
             .then(data => {
                if (data.result === 1) {
                   item.quantity--;
+                  this.updateCounter();
                }
             })
-            .then(() => {
-               this.updateCounter();
-            })
-         } else if (item.quantity === 1) {
+         } else {
             this.$parent.deleteJson(`${API}/api/cart/${item.id_product}`)
             .then(data => {
                if (data.result === 1) {
-                     this.cartItems.splice(this.cartItems.indexOf(item), 1)
+                  this.cartItems.splice(this.cartItems.indexOf(item), 1);
+                  this.updateCounter();
                }
             });
          };
-         this.updateCounter();
       },
       updateCounter() {
          let counter = 0;
