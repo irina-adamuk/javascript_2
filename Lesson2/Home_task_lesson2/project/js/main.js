@@ -1,4 +1,25 @@
 'use strict';
+
+// ? 1) Добавьте пустые классы для корзины товаров и элемента корзины товаров. 
+// ? Продумайте, какие методы понадобятся для работы с этими сущностями.
+
+class Cart {
+    // Методы которые могут понадобиться:
+    // add();
+    // delete();
+    // clear();
+    // getTotalSum();
+    // getTotalCount();
+    // proceedToCheckout();
+    // render();
+}
+
+class CartItem {
+    // Методы которые могут понадобиться:
+    // getItemSum()
+}
+
+// ? 2) Добавьте для GoodsList метод, определяющий суммарную стоимость всех товаров.
 class ProductList {
     constructor(container = '.products') {
         this.container = container;
@@ -6,6 +27,7 @@ class ProductList {
         this._allProducts = [];
         this._fetchGoods();
         this._render();
+        this.getTotalSum();
 
     }
 
@@ -28,6 +50,15 @@ class ProductList {
             block.insertAdjacentHTML('afterbegin', productObject.render());
         }
     }
+    getTotalSum() {
+        let sum = 0;
+        this._goods.forEach((good) => {
+            sum += good.price;
+        });
+        // console.log(`Total sum: ${sum}`);
+        return sum;
+    }
+
 }
 class ProductItem {
     constructor(product, img = "https://place-hold.it/205/211") {
@@ -48,4 +79,6 @@ class ProductItem {
 }
 
 new ProductList();
+
+
 
