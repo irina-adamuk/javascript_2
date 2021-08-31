@@ -25,36 +25,57 @@
                     <img  src="img/logo.svg" alt="logo">
                 </div>
                 <div class="cart">
-                    <form action="#" class="search__form">
-                        <input type="text" class="search__field">
+                    <form action="#" class="search__form" @submit.prevent="filter">
+                        <input type="text" class="search__field" v-model="userSearch">
                         <button class="search__btn" type="submit">
                             <i class="fas fa-search"></i>
                         </button>
                     </form>
-                    <button class="cart__btn" type="button">
-                        <span class="cart__count">8</span>
+                    <button class="cart__btn" type="button" @click="showCart = !showCart">
+                        <span class="cart__count">{{ cartCount }}</span>
                     </button>
+                    <div class="cart__block" v-show="showCart">
+                        <p class="cart__message" v-if="!cartItems.length">Корзина пуста</p>
+                        <div class="cart__item-wrapper" v-for="item of cartItems" :key="item.id_product">
+                            <div class="cart__top"></div>
+                            <div class="cart__item" >
+                                <div class="cart__left-block">
+                                    <img :src="imgCart" alt="Some image">
+                                    <div class="product__inner">
+                                        <p class="product__title">{{item.product_name}}</p>
+                                        <p class="product__quantity">Количество: {{item.quantity}}</p>
+                                        <p class="product__single-price">{{item.price}}₽ за единицу</p>
+                                    </div>
+                                </div>
+                                <div class="cart__right-block">
+                                    <p class="product__price">{{item.quantity*item.price}}₽</p>
+                                    <button class="btn--del" @click="remove(item)">&times;</button>
+                                </div>
+                            </div>
+                            <div class="cart__bottom"></div>
+                        </div>
+                    </div>
                 </div>
             </header>
             <main>
                 <div class="products">
-                    <div class="product__item" v-for="product of products" :key="product.id_product">
+                    <div class="product__item" v-for="product of filtered" :key="product.id_product">
                         <img :src="imgCatalog" alt=" Some img">
                         <div class="product__inner">
-                            <h3>{{ product.product_name}}</h3>
-                            <p>{{ product.price }}₽</p>
-                            <button class="btn-buy" @click="addProduct(product)">Купить</button>                            
+                            <h3 class="product__title">{{ product.product_name}}</h3>
+                            <p class="product__price">{{ product.price }}₽</p>
+                            <button class="btn--buy" @click="addProduct(product)">Купить</button>                            
                         </div>
                     </div>    
                 </div>
             </main>            
-        </div>
+        </div><!-- /.wrapper -->
     </div><!-- /app -->
 
     
     <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js" integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="./js/script.js"></script>
+    <script src="./js/script.js"></script>
 </body>
 </html>
 
